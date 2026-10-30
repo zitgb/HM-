@@ -10,7 +10,7 @@ public class TodosTest {
     public void shouldAddThreeTasksOfDifferentType() {
         SimpleTask simpleTask = new SimpleTask(5, "Позвонить родителям");
 
-        String[] subtasks = { "Молоко", "Яйца", "Хлеб" };
+        String[] subtasks = {"Молоко", "Яйца", "Хлеб"};
         Epic epic = new Epic(55, subtasks);
 
         Meeting meeting = new Meeting(
@@ -26,26 +26,23 @@ public class TodosTest {
         todos.add(epic);
         todos.add(meeting);
 
-        Task[] expected = { simpleTask, epic, meeting };
+        Task[] expected = {simpleTask, epic, meeting};
         Task[] actual = todos.findAll();
 
         assertArrayEquals(expected, actual);
     }
+
     @Test
-    public  void shouldFindTaskByQuery(){
-        SimpleTask simpleTask = new SimpleTask(5 ,"Купить хлеб");
-        String[] subtasks = {"Купить молоко","Купить яйца"};
+    public void shouldFindSeveralTasksByQuery() {
+        SimpleTask simpleTask = new SimpleTask(5, "Купить хлеб");
+
+        String[] subtasks = {"Купить молоко", "Купить яйца"};
         Epic epic = new Epic(7, subtasks);
 
-        Meeting meeting = new Meeting(6,
-                "Встреча в Москве",
-                "Обсуждение проекта",
-                "В 12:30");
         Todos todos = new Todos();
 
         todos.add(simpleTask);
         todos.add(epic);
-        //todos.add(meeting);
 
         Task[] expected = {simpleTask, epic};
         Task[] actual = todos.search("Купить");
@@ -53,4 +50,55 @@ public class TodosTest {
         assertArrayEquals(expected, actual);
     }
 
+    @Test
+    public void shouldFindOneTaskByQuery() {
+        SimpleTask simpleTask = new SimpleTask(5, "Купить хлеб");
+
+        String[] subtasks = {"Купить молоко", "Купить яйца"};
+        Epic epic = new Epic(7, subtasks);
+
+        Meeting meeting = new Meeting(
+                6,
+                "Встреча в Москве",
+                "Обсуждение проекта",
+                "В 12:30"
+        );
+
+        Todos todos = new Todos();
+
+        todos.add(simpleTask);
+        todos.add(epic);
+        todos.add(meeting);
+
+        Task[] expected = {meeting};
+        Task[] actual = todos.search("Москве");
+
+        assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldFindNoTasksByQuery() {
+        SimpleTask simpleTask = new SimpleTask(5, "Купить хлеб");
+
+        String[] subtasks = {"Купить молоко", "Купить яйца"};
+        Epic epic = new Epic(7, subtasks);
+
+        Meeting meeting = new Meeting(
+                6,
+                "Встреча в Москве",
+                "Обсуждение проекта",
+                "В 12:30"
+        );
+
+        Todos todos = new Todos();
+
+        todos.add(simpleTask);
+        todos.add(epic);
+        todos.add(meeting);
+
+        Task[] expected = {};
+        Task[] actual = todos.search("Сходить в спортзал");
+
+        assertArrayEquals(expected, actual);
+    }
 }
